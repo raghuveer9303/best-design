@@ -248,6 +248,46 @@ nav {
         return false;
     });
 })();
+</script>
+<script>
+// Protection against unwanted navigation in iframe content
+(function() {
+    'use strict';
+    
+    // Prevent all navigation attempts
+    document.addEventListener('click', function(e) {
+        const target = e.target.closest('a');
+        if (target && target.href) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Navigation prevented for:', target.href);
+            return false;
+        }
+    }, true);
+    
+    // Prevent form submissions
+    document.addEventListener('submit', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Form submission prevented');
+        return false;
+    }, true);
+    
+    // Override window.open
+    const originalOpen = window.open;
+    window.open = function() {
+        console.log('window.open() prevented');
+        return null;
+    };
+    
+    // Prevent hash changes that could affect parent
+    window.addEventListener('hashchange', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Hash change prevented');
+        return false;
+    });
+})();
 </script></head>
 <body class="font-body bg-apex-light text-apex-charcoal antialiased">
     <!-- Navigation -->
@@ -299,8 +339,14 @@ nav {
                         Leveraging extensive experience in ETL, cloud services, and full-stack development to build scalable data solutions and drive operational efficiency.
                     </p>
                     <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <a href="#projects" class="apex-btn-primary">View My Work</a>
-                        <a href="#contact" class="apex-btn-secondary">Get In Touch</a>
+                        <a href="#projects" class="apex-btn-primary">
+                            <i data-lucide="layout-grid" class="mr-2 h-5 w-5"></i>
+                            View My Work
+                        </a>
+                        <a href="#contact" class="apex-btn-secondary">
+                            <i data-lucide="send" class="mr-2 h-5 w-5"></i>
+                            Get In Touch
+                        </a>
                     </div>
                 </div>
             </div>
